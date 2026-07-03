@@ -1,0 +1,79 @@
+name: AudioCore
+options:
+  bundleIdPrefix: com.audiocore
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "AudioCore Local Signing"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGNING_REQUIRED: YES
+    CODE_SIGNING_ALLOWED: YES
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+targets:
+  AudioCore:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: AudioCore/Sources
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.audiocore.app
+        INFOPLIST_FILE: AudioCore/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: AudioCore/Resources/AudioCore.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  AudioCoreControl:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: AudioCoreControl/Sources
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.audiocore.app.control
+        INFOPLIST_FILE: AudioCoreControl/Resources/Info.plist
+        CODE_SIGN_ENTITLEMENTS: AudioCoreControl/Resources/AudioCoreControl.entitlements
+        SKIP_INSTALL: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+  AudioCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: AudioCoreTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.audiocore.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: AudioCore
+        embed: false
+schemes:
+  AudioCore:
+    build:
+      targets:
+        AudioCore: all
+        AudioCoreTests: [test]
+    test:
+      config: Debug
+      targets:
+        - AudioCoreTests
+    run:
+      config: Debug
+      executable: AudioCore
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

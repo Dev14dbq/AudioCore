@@ -1,0 +1,13 @@
+.DS_Store
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+.build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Локальные настройки Claude Code — не для публикации
+.claude/
