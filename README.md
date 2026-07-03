@@ -34,15 +34,7 @@
 
 Скачай `AudioCore.zip` из [релизов](https://github.com/Dev14dbq/AudioCore/releases/latest), распакуй и перенеси `AudioCore.app` в `Applications`.
 
-Сборка подписана самоподписанным сертификатом (без Apple Developer Program), поэтому при первом запуске macOS покажет предупреждение «неизвестный разработчик» — это нормально. Правый клик по `AudioCore.app` → «Открыть» (один раз), либо в терминале:
-
-```bash
-xattr -cr /Applications/AudioCore.app
-```
-
 При первом запуске приложение попросит разрешение на запись системного звука — без него звук управляемых приложений будет тихим.
-
-> Расширение Control Center в эту сборку не входит: entitlement App Groups требует настоящий provisioning profile от Apple, который самоподписанный сертификат получить не может. Основное меню-бар приложение это не затрагивает.
 
 ### Сборка из исходников
 
@@ -75,15 +67,7 @@ A macOS menu bar app that gives every running application its own volume slider,
 
 Download `AudioCore.zip` from the [releases page](https://github.com/Dev14dbq/AudioCore/releases/latest), unzip it, and move `AudioCore.app` to `Applications`.
 
-The build is signed with a self-signed certificate (no paid Apple Developer Program), so macOS will show an "unidentified developer" warning on first launch — that's expected. Right-click `AudioCore.app` → "Open" once, or in Terminal:
-
-```bash
-xattr -cr /Applications/AudioCore.app
-```
-
 On first launch the app will request permission to record system audio — without it, the audio of controlled apps stays silent.
-
-> The Control Center extension isn't included in this build: the App Groups entitlement requires a real Apple-issued provisioning profile, which a self-signed certificate can't obtain. The main menu bar app is unaffected.
 
 ### Building from source
 
