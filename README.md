@@ -1,58 +1,96 @@
-# AudioCore
-
 <p align="center">
   <img src="AudioCore/Sources/Assets.xcassets/AppIcon.appiconset/icon_256.png" width="128" height="128" alt="AudioCore icon">
 </p>
 
-Приложение-микшер для macOS: живёт в строке меню и позволяет управлять громкостью **отдельных приложений** независимо от общей громкости системы — как микшер приложений в Windows, только на Mac.
+<h1 align="center">AudioCore</h1>
 
-Работает через нативный Core Audio Process Tap API — перехватывает аудиопоток конкретного приложения, применяет к нему свой gain/mute и подмешивает результат в реальное устройство вывода. Само приложение никакого звука не проигрывает — это прозрачная прослойка между таргет-приложениями и колонками/наушниками.
+<p align="center">
+  Микшер приложений для macOS — своя громкость для каждого приложения.<br>
+  Per-application volume mixer for macOS.
+</p>
 
-## Возможности
+<p align="center">
+  <a href="#-русский">Русский</a> · <a href="#-english">English</a>
+</p>
+
+---
+
+## 🇷🇺 Русский
+
+Менюбар-приложение для macOS, которое даёт каждому запущенному приложению свой собственный слайдер громкости — независимо от общей громкости системы. Работает через нативный Core Audio Process Tap: перехватывает звук нужного приложения, применяет к нему свою громкость/мьют и подмешивает обратно в реальный вывод.
+
+**[Скачать готовую сборку →](https://github.com/Dev14dbq/AudioCore/releases/latest)**
+
+### Возможности
 
 - Отдельный слайдер громкости (0–150%) для каждого приложения, которое сейчас издаёт звук
-- Mute конкретного приложения без влияния на остальные
-- Список приложений обновляется автоматически — не нужно ничего настраивать вручную
-- Управление громкостью через Siri Shortcuts / Control Center intents (`AudioCoreControl`)
-- Настройки громкости сохраняются между запусками приложений и перезапусками AudioCore
+- Мьют конкретного приложения без влияния на остальные
+- Список приложений обновляется автоматически
+- Управление через Siri Shortcuts / Control Center
+- Настройки громкости сохраняются между запусками
 - Автозапуск при входе в систему
 
-## Требования
+### Установка
 
-- macOS 26 или новее
-- Xcode 17+
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) для генерации `.xcodeproj`
+Скачай `AudioCore.zip` из [релизов](https://github.com/Dev14dbq/AudioCore/releases/latest), распакуй и перенеси `AudioCore.app` в `Applications`.
 
-## Сборка
-
-Проект описан декларативно в [`project.yml`](project.yml) — `.xcodeproj` в репозитории не хранится и генерируется на месте:
+Сборка подписана самоподписанным сертификатом (без Apple Developer Program), поэтому при первом запуске macOS покажет предупреждение «неизвестный разработчик» — это нормально. Правый клик по `AudioCore.app` → «Открыть» (один раз), либо в терминале:
 
 ```bash
-brew install xcodegen   # если ещё не установлен
+xattr -cr /Applications/AudioCore.app
+```
+
+При первом запуске приложение попросит разрешение на запись системного звука — без него звук управляемых приложений будет тихим.
+
+> Расширение Control Center в эту сборку не входит: entitlement App Groups требует настоящий provisioning profile от Apple, который самоподписанный сертификат получить не может. Основное меню-бар приложение это не затрагивает.
+
+### Сборка из исходников
+
+```bash
+brew install xcodegen
 xcodegen generate
 open AudioCore.xcodeproj
 ```
 
-Дальше — обычная сборка (`⌘R`) или архивация через Xcode/`xcodebuild`.
+Требуется macOS 26+ и Xcode 17+.
 
-## Подпись и распространение
+---
 
-По умолчанию проект настроен на **самоподписанный сертификат** (`CODE_SIGN_STYLE: Manual` в `project.yml`) — это позволяет собирать и распространять приложение полностью бесплатно, без Apple Developer Program, и без 7-дневного протухания, характерного для бесплатной автоподписи Xcode.
+## 🇬🇧 English
 
-Ограничение такого подхода: entitlement `com.apple.security.application-groups` требует настоящий provisioning profile от Apple вне зависимости от способа подписи, поэтому расширение **Control Center** (`AudioCoreControl`) в самоподписанную сборку не входит — работает только основное приложение в строке меню. Чтобы включить виджет Control Center, нужно платное членство Apple Developer Program ($99/год): переключить `DEVELOPMENT_TEAM` на реальный Team ID, `CODE_SIGN_STYLE` на `Automatic`, вернуть зависимость `AudioCoreControl` в таргет `AudioCore` в `project.yml` и подписать Developer ID для нотаризации.
+A macOS menu bar app that gives every running application its own volume slider, independent of the system-wide volume. It works through the native Core Audio Process Tap API: it captures a target app's audio, applies its own gain/mute, and mixes the result back into the real output device.
 
-При первом запуске самоподписанной сборки Gatekeeper покажет предупреждение «неизвестный разработчик» — это ожидаемо, поскольку сборка не нотаризована Apple. Обходится один раз: правый клик по `AudioCore.app` → «Открыть», либо `xattr -cr AudioCore.app` в терминале.
+**[Download the prebuilt app →](https://github.com/Dev14dbq/AudioCore/releases/latest)**
 
-## Разрешения
+### Features
 
-Приложению нужно разрешение **System Audio Recording** (запись системного звука) — без него звук у затронутых приложений будет полностью тихим. Разрешение запрашивается автоматически при первом запуске; если что-то пошло не так, приложение покажет баннер с прямой ссылкой в Privacy & Security.
+- Per-app volume slider (0–150%) for every app currently making sound
+- Mute a single app without affecting anything else
+- App list updates automatically
+- Control via Siri Shortcuts / Control Center
+- Volume settings persist across app relaunches
+- Launch at login
 
-## Архитектура
+### Installation
 
-- `AudioMixerEngine` — координирует, какие приложения сейчас затронуты (имеют живой tap) и с каким gain/mute
-- `AggregateMixerDevice` — владеет единым агрегированным устройством вывода и IO-коллбэком реального времени, который смешивает все активные tap'ы в один поток
-- `MixerRenderMath` — чистая математика сведения сэмплов, без обращений к Core Audio — покрыта юнит-тестами
-- `VolumeManager` — координатор уровня приложения: опрашивает список активных приложений, хранит состояние в App Group, синхронизируется с расширением Control Center через Darwin-уведомления
-- `AudioCoreControl` — расширение с App Intents для Siri Shortcuts и Control Center
+Download `AudioCore.zip` from the [releases page](https://github.com/Dev14dbq/AudioCore/releases/latest), unzip it, and move `AudioCore.app` to `Applications`.
 
-Все обращения к реальному аудио-потоку выполняются без блокировок и аллокаций в real-time-колбэке — управляющий поток публикует неизменяемый снэпшот состояния под `os_unfair_lock`, а аудиопоток читает его через неблокирующий `trylock`.
+The build is signed with a self-signed certificate (no paid Apple Developer Program), so macOS will show an "unidentified developer" warning on first launch — that's expected. Right-click `AudioCore.app` → "Open" once, or in Terminal:
+
+```bash
+xattr -cr /Applications/AudioCore.app
+```
+
+On first launch the app will request permission to record system audio — without it, the audio of controlled apps stays silent.
+
+> The Control Center extension isn't included in this build: the App Groups entitlement requires a real Apple-issued provisioning profile, which a self-signed certificate can't obtain. The main menu bar app is unaffected.
+
+### Building from source
+
+```bash
+brew install xcodegen
+xcodegen generate
+open AudioCore.xcodeproj
+```
+
+Requires macOS 26+ and Xcode 17+.
